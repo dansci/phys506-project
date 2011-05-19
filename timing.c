@@ -10,6 +10,7 @@
 
 int main(int argc, char *argv[])
 {
+     /* default values */
      int NHITS = 500;
      double XTOL = .1;
 
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
 	  default:
 	       ;
 	  }
-  
+
      /* initialize random number resources */
      init_random();
 
@@ -57,14 +58,8 @@ int main(int argc, char *argv[])
      ret = nlopt_add_inequality_constraint(opt, time_check, &e1, 1e-20);
 
      double x[4];
-     if (argc > 1) {
-	  x[0] = atof(argv[1]);
-	  x[1] = atof(argv[2]);
-	  x[2] = atof(argv[3]);
-     } else
-	  x[0] = x[1] = x[2] = 0;
-     
-     x[3] = 0;
+     x[0] = x[1] = x[2] = x[3] = 0;
+
      double fval = mf(4, x, NULL, &e1);
      
      ret = nlopt_optimize(opt, x, &fval);

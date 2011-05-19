@@ -1,5 +1,5 @@
-main: main.c event.h geometry.h random.h reconstruct.h
-	gcc -o main main.c -lm -lgsl -lgslcblas -lnlopt -O3
+timing: timing.c event.h geometry.h random.h reconstruct.h
+	gcc -o timing timing.c -lm -lgsl -lgslcblas -lnlopt -O2
 
-check: check_of_randomness.c
-	gcc -o check check_of_randomness.c -lm -lgsl -lgslcblas -g
+timing_debug: timing.c event.h geometry.h random.h reconstruct.h
+	gcc -o timing_debug timing.c -lm -lgsl -lgslcblas -lnlopt -g
