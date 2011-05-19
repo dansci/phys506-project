@@ -1,0 +1,2 @@
+This is to show the bias of the fitting program.  I envisage printing
+(x-x0, y-y0, z-z0, t-t0) for different NHIT values.
