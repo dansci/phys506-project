@@ -1,8 +1,9 @@
 #!/bin/sh
 
 PROG=./timing_accuracy
-NHITSMIN=100
-NHITSMAX=1000
+NHITSMIN=50
+NHITSMAX=50
+NHITSSTRIDE=50
 NTRIALS=1000
 TOL=.1
 
@@ -15,5 +16,5 @@ while [ $NHITS -le $NHITSMAX ]; do
 	$PROG -N $NHITS -t $TOL >> times_N${NHITS}_t$TOL.txt
 	GSL_RNG_SEED=$(( GSL_RNG_SEED + 1 ))
     done
-    NHITS=$(( NHITS + 100))
+    NHITS=$(( NHITS + NHITSSTRIDE ))
 done
