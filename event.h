@@ -10,7 +10,7 @@ struct pmtmap {
 struct pmt {
      double x[3]; /* position in cartesian */
      double p[3]; /* and polar coords */
-}
+};
 
 struct event {
      /* timing fitter info */
