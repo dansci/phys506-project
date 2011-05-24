@@ -1,4 +1,1 @@
-* add in getopts for # photons, and any other things that may be
-  relevant for benchmarking.
-
-* run with different random seeds, and plot biases.
+* write a position distribution fitter
