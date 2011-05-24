@@ -1,4 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <nlopt.h>
+#include "random.h"
+#include "geometry.h"
+#include "event.h"
+#include "reconstruct.h"
 
 /* Steps:
 
@@ -22,3 +29,22 @@
 
 */
    
+int main(int argc, char *argv[])
+{
+     int NHITS = 500;
+     int NPHI = 10;
+     int NTHETA = 5;
+
+     init_random();
+
+     struct event e1;
+     make_event(&e1, NHITS);
+
+     struct pmtmap pmts;
+     pmts.N = NPHI*NTHETA;
+     pmts.nphi = NPHI;
+     pmts.ntheta = NTHETA;
+     init_pmtmap(&pmts);
+
+     return 0;
+}
