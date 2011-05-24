@@ -32,18 +32,26 @@ struct hit {
 /* this should have the number of pmts and the division sorted out */
 void init_pmtmap(struct pmtmap *p)
 {
-     int i;
+     int i, j;
 
+     /* allocate the space for the PMTs */
+     p->pmt = malloc(p->N*sizeof(struct pmt));
+     
      /* FIXME: we're just ignoring the r position because we know it's
       * all the same.  But if we optimize this, the indexing could go
       * astray */
+     
+     /* phi goes 0 -> 2 pi */
      double dphi = (2*M_PI)/(2*p->nphi);
-     for (i=0; i<p->nphi; i++)
-	  p->pmt[i].p[2] = (2*i + 1)*dphi;
-
-     double dcosth = M_PI / (2*p->ntheta);
+     /* costheta goes from 1 -> -1  */
+     double dcosth = 2.0 / (2*p->ntheta);
+     
      for (i=0; i<p->ntheta; i++)
-	  p->pmt[i].p[1] = acos((2*i + 1)*dcosth);
+	  for (j=0; j<p->nphi; j++) {
+	       p->pmt[p->nphi*i+j].p[1] = acos(1 - (2*i + 1)*dcosth);
+	       p->pmt[p->nphi*i+j].p[2] = (2*j + 1)*dphi;
+	  }
+     
 }
 
      
