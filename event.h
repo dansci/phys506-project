@@ -29,6 +29,24 @@ struct hit {
      double hit_time;
 };
 
+/* this should have the number of pmts and the division sorted out */
+void init_pmtmap(struct pmtmap *p)
+{
+     int i;
+
+     /* FIXME: we're just ignoring the r position because we know it's
+      * all the same.  But if we optimize this, the indexing could go
+      * astray */
+     double dphi = (2*M_PI)/(2*p->nphi);
+     for (i=0; i<p->nphi; i++)
+	  p->pmt[i].p[2] = (2*i + 1)*dphi;
+
+     double dcosth = M_PI / (2*p->ntheta);
+     for (i=0; i<p->ntheta; i++)
+	  p->pmt[i].p[1] = acos((2*i + 1)*dcosth);
+}
+
+     
 int hit_time_cmp(struct hit *h1, struct hit *h2)
 {
      if (h1->hit_time > h2->hit_time)
