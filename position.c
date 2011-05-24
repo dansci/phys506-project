@@ -35,16 +35,19 @@ int main(int argc, char *argv[])
      int NPHI = 10;
      int NTHETA = 5;
 
-     init_random();
+     struct pmtmap pmtmap;
+     pmtmap.N = NPHI*NTHETA;
+     pmtmap.nphi = NPHI;
+     pmtmap.ntheta = NTHETA;
+
 
      struct event e1;
-     make_event(&e1, NHITS);
+     init_random();
+     init_pmtmap(&pmtmap, &e1);
 
-     struct pmtmap pmts;
-     pmts.N = NPHI*NTHETA;
-     pmts.nphi = NPHI;
-     pmts.ntheta = NTHETA;
-     init_pmtmap(&pmts);
+
+     make_event(&e1, NHITS);
+     fill_pmt_info(&e1, &pmtmap);
 
      return 0;
 }

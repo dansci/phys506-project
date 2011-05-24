@@ -30,12 +30,14 @@ struct hit {
 };
 
 /* this should have the number of pmts and the division sorted out */
-void init_pmtmap(struct pmtmap *p)
+void init_pmtmap(struct pmtmap *p, struct event *e)
 {
      int i, j;
 
      /* allocate the space for the PMTs */
      p->pmt = malloc(p->N*sizeof(struct pmt));
+     e->pmt_hits = malloc(p->N*sizeof(double));
+     e->e_pmt_hits = malloc(p->N*sizeof(double));
      
      /* FIXME: we're just ignoring the r position because we know it's
       * all the same.  But if we optimize this, the indexing could go
@@ -88,8 +90,9 @@ void make_event(struct event *e, int N)
 
      e->hits = malloc(sizeof(struct hit)*N);
      int i;
-     for (i=0; i<N; i++) {
+     for (i=0; i<N; i++) {	
 	  e->hits[i].hit_pos = malloc(3*sizeof(double));
+	  
 	  spherical_random_direction(dir);
 	  get_intersect(e->spawn_pos, dir, e->hits[i].hit_pos);
 
@@ -113,6 +116,7 @@ void fill_pmt_info(struct event *e, struct pmtmap *p)
 	  e->pmt_hits[get_pmt_number(p, e->hits[i].hit_pos)]++;
 }
 
+/* this is returning greater than the dratted number of PMTS! */
 int get_pmt_number(struct pmtmap *p, double *pos)
 { 
      int ret = 0;
@@ -121,28 +125,32 @@ int get_pmt_number(struct pmtmap *p, double *pos)
       * directly in a struct one day */
 
      /* FIXME: inefficient; not using all the info available to us */
-     double r,theta, phi;
+     double r,costheta, theta, phi;
      r = sqrt(pos[0]*pos[0] + pos[1]*pos[1] + pos[2]*pos[2]);
-     theta = acos(pos[2]/r);
+     costheta = pos[2]/r;
+     theta = acos(costheta);
      phi = atan(pos[1]/pos[0]);
-     
-     double dtheta = M_PI / (2*p->ntheta); /* the regions covered by */
+    
+     double dcostheta = M_PI / (2*p->ntheta); /* the regions covered by */
      double dphi = 2*M_PI / (2*p->nphi);   /* the pmt from its center*/
 
      int i;
-     for (i=0; ; i++)
-	  if (theta > p->pmt[i].p[1] + dtheta &&
-	      theta < p->pmt[i+1].p[1] - dtheta) {
-	       ret += i*p->nphi;
+     for (i=0; ; i+=p->nphi) /* there are nphi duplicates of theta*/
+	  /* heeecka inefficient having to use cos so much...  plus it
+	   doesn't seem to be working...  you know... costheta goes 1
+	   -> -1 which is not what this jank expects*/
+	  if (costheta > cos(p->pmt[i].p[1]) + dcostheta &&
+	      costheta < cos(p->pmt[i+p->nphi].p[1]) - dcostheta)
 	       break;
-	  }
-
+     
+     ret += i;
+     
      for (i=0; ; i++)
 	  if (phi > p->pmt[i].p[2] + dphi &&
-	      phi < p->pmt[i+1].p[2] - dphi) {
-	       ret += i;
+	      phi < p->pmt[i+1].p[2] - dphi)
 	       break;
-	  }
+
+     ret += i;
 
      return ret;
 }
