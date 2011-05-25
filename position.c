@@ -45,9 +45,11 @@ int main(int argc, char *argv[])
      init_random();
      init_pmtmap(&pmtmap, &e1);
 
-
      make_event(&e1, NHITS);
      fill_pmt_info(&e1, &pmtmap);
+     
+     double pos[3] = {0, 0, 0};
+     fill_expected_info(pos, &e1, &pmtmap);
 
      return 0;
 }

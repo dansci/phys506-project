@@ -21,7 +21,8 @@ struct event {
 
      /* pos distn fitter info */
      double *pmt_hits; /* number of hits per PMT */
-     double *e_pmt_hits; /* expected number of hits per PMT */
+     double *pmt_hits_normed; /* normalized to one */
+     double *e_pmt_hits_normed; /* expected number of hits per PMT */
 };
 
 struct hit {
@@ -37,7 +38,8 @@ void init_pmtmap(struct pmtmap *p, struct event *e)
      /* allocate the space for the PMTs */
      p->pmt = malloc(p->N*sizeof(struct pmt));
      e->pmt_hits = malloc(p->N*sizeof(double));
-     e->e_pmt_hits = malloc(p->N*sizeof(double));
+     e->pmt_hits_normed = malloc(p->N*sizeof(double));
+     e->e_pmt_hits_normed = malloc(p->N*sizeof(double));
      
      /* FIXME: we're just ignoring the r position because we know it's
       * all the same.  But if we optimize this, the indexing could go
@@ -114,6 +116,9 @@ void fill_pmt_info(struct event *e, struct pmtmap *p)
      /* loop over photons, incrementing the relevant PMT number */
      for (i=0; i<e->N; i++)
 	  e->pmt_hits[get_pmt_number(p, e->hits[i].hit_pos)]++;
+
+     for (i=0; i<e->N; i++)
+	  e->pmt_hits_normed[i] = e->pmt_hits[i] / e->N;
 }
 
 /* this is returning greater than the dratted number of PMTS! */
@@ -153,4 +158,31 @@ int get_pmt_number(struct pmtmap *p, double *pos)
      ret += i;
 
      return ret;
+}
+
+static double nd[3], np[3]; /* vector of detector normal and photon direction*/
+
+void fill_expected_info(double *pos, struct event *e, struct pmtmap *p)
+{
+     /* we're going to make it proportional to cos(theta)/r^2 */
+     double nd2, np2, costheta, total = 0;
+     int i, j;
+     for (i=0; i<p->N; i++) {
+	  nd2 = np2 = costheta = 0;
+	  costheta = 0;
+	  for (j=0; j<3; j++) {
+	       nd[j] = -p->pmt[i].x[j];
+	       np[j] = p->pmt[i].x[j] - pos[j];
+	       costheta = nd[j] * np[j];
+	       np2 += np[j]*np[j];
+	       nd2 += nd[j]*nd[j];
+	  }
+	  costheta /= (sqrt(np2)*sqrt(nd2));
+	  e->e_pmt_hits_normed[i] = costheta/np2;
+	  total += costheta / np2;
+     }
+
+     for (i=0; i<p->N; i++)
+	  e->e_pmt_hits_normed[i] /= total;
+     
 }
