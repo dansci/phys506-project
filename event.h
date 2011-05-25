@@ -175,7 +175,7 @@ void fill_expected_info(double *pos, struct event *e, struct pmtmap *p)
 	  nd2 = np2 = costheta = 0;
 	  costheta = 0;
 	  for (j=0; j<3; j++) {
-	       nd[j] = -p->pmt[i].x[j];
+	       nd[j] = p->pmt[i].x[j];
 	       np[j] = p->pmt[i].x[j] - pos[j];
 	       costheta += nd[j] * np[j];
 	       np2 += np[j]*np[j];
