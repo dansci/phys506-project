@@ -41,19 +41,23 @@ void init_pmtmap(struct pmtmap *p, struct event *e)
      e->pmt_hits_normed = malloc(p->N*sizeof(double));
      e->e_pmt_hits_normed = malloc(p->N*sizeof(double));
      
-     /* FIXME: we're just ignoring the r position because we know it's
-      * all the same.  But if we optimize this, the indexing could go
-      * astray */
-     
      /* phi goes 0 -> 2 pi */
      double dphi = (2*M_PI)/(2*p->nphi);
      /* costheta goes from 1 -> -1  */
      double dcosth = 2.0 / (2*p->ntheta);
-     
+
+     double theta, phi;
      for (i=0; i<p->ntheta; i++)
 	  for (j=0; j<p->nphi; j++) {
-	       p->pmt[p->nphi*i+j].p[1] = acos(1 - (2*i + 1)*dcosth);
-	       p->pmt[p->nphi*i+j].p[2] = (2*j + 1)*dphi;
+	       theta = acos(1-(2*i+1)*dcosth);
+	       phi = (2*j+1)*dphi;
+	       p->pmt[p->nphi*i+j].p[0] = radius;
+	       p->pmt[p->nphi*i+j].p[1] = theta;
+	       p->pmt[p->nphi*i+j].p[2] = phi;
+	       /* FIXME: hecka inefficient */
+	       p->pmt[p->nphi*i+j].x[0] = radius*sin(theta)*cos(phi);
+	       p->pmt[p->nphi*i+j].x[1] = radius*sin(theta)*sin(phi);
+	       p->pmt[p->nphi*i+j].x[2] = radius*cos(theta);
 	  }
      
 }
