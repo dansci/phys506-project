@@ -124,30 +124,30 @@ int get_pmt_number(struct pmtmap *p, double *pos)
       * much more useful to us.  Maybe we'll put that information
       * directly in a struct one day */
 
-     /* FIXME: inefficient; not using all the info available to us */
-     double r,costheta, theta, phi;
+     double r, costheta, phi;
      r = sqrt(pos[0]*pos[0] + pos[1]*pos[1] + pos[2]*pos[2]);
      costheta = pos[2]/r;
-     theta = acos(costheta);
-     phi = atan(pos[1]/pos[0]);
+     /* FIXME: i don't actually know if this'll give me the right answer */
+     phi = atan2(pos[1],pos[0]);
+     /* sort out the quadrant jank */
+     phi += (phi<0)? 2*M_PI : 0;
     
-     double dcostheta = M_PI / (2*p->ntheta); /* the regions covered by */
+     double dcostheta = 2.0 / (2*p->ntheta); /* the regions covered by */
      double dphi = 2*M_PI / (2*p->nphi);   /* the pmt from its center*/
 
      int i;
      for (i=0; ; i+=p->nphi) /* there are nphi duplicates of theta*/
-	  /* heeecka inefficient having to use cos so much...  plus it
-	   doesn't seem to be working...  you know... costheta goes 1
-	   -> -1 which is not what this jank expects*/
-	  if (costheta > cos(p->pmt[i].p[1]) + dcostheta &&
-	      costheta < cos(p->pmt[i+p->nphi].p[1]) - dcostheta)
+	  /* note that costheta goes 1 -> -1, that's why the
+	   * conditionals are weird. */
+	  if (costheta < cos(p->pmt[i].p[1]) + dcostheta &&
+	      costheta > cos(p->pmt[i].p[1]) - dcostheta)
 	       break;
      
      ret += i;
      
      for (i=0; ; i++)
-	  if (phi > p->pmt[i].p[2] + dphi &&
-	      phi < p->pmt[i+1].p[2] - dphi)
+	  if (phi > p->pmt[i].p[2] - dphi &&
+	      phi < p->pmt[i].p[2] + dphi)
 	       break;
 
      ret += i;
