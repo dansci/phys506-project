@@ -1,6 +1,11 @@
 const double scint_time = 5e-9; /* 5ns? */
 const double light_speed = 3e8;
 
+struct pos_data {
+     struct pmtmap *p;
+     struct event *e;
+};
+
 struct pmtmap {
      int N; /* number of PMTS */
      int ntheta, nphi; /* division of theta, phi directions */

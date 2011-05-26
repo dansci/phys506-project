@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
      nlopt_set_xtol_abs(opt, tols);
 
      ret = nlopt_add_inequality_constraint(opt, radius_check, &e1, 1e-10);
-     ret = nlopt_add_inequality_constraint(opt, time_check, &e1, 1e-20);
+     ret = nlopt_add_inequality_constraint(opt, time_check, &e1, 1e-15);
 
      double x[4];
      x[0] = x[1] = x[2] = x[3] = 0;

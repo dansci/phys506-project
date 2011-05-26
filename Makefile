@@ -8,4 +8,5 @@ timing_accuracy: ./tests/timing_fit/timing_accuracy.c event.h geometry.h random.
 	gcc -I ./ -o ./tests/timing_fit/timing_accuracy ./tests/timing_fit/timing_accuracy.c -lm -lgsl -lgslcblas -lnlopt
 
 position: position.c event.h geometry.h random.h reconstruct.h
-	gcc -o position position.c -lm -lgsl -lgslcblas -g
+#	gcc -o position position.c -lm -lgsl -lgslcblas -lnlopt -g -pg
+	gcc -o position position.c -lm -lgsl -lgslcblas -lnlopt -O2

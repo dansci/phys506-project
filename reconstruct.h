@@ -34,6 +34,30 @@ double mf(unsigned n, const double *x, double *grad, void *f_data)
      return total;
 }
 
+double mf_p(unsigned n, const double *x, double *grad, void *f_data)
+{
+
+     struct pmtmap *p = ((struct pos_data *) f_data)->p;
+     struct event *e = (struct event *) ((struct pos_data *) f_data)->e;
+     
+     /* number of pmts */
+     int N = p->N;
+     double total = 0;
+
+     fill_expected_info(x, e, p);
+
+     /* calculates the likelihood chisquare */
+     int i;
+     double n_i, v_i;
+     for (i=0; i<N; i++) {
+	  n_i = e->pmt_hits_normed[i];
+	  v_i = e->e_pmt_hits_normed[i];
+	  total += v_i - n_i + n_i*log(n_i/v_i);
+     }
+     
+     return 2*total;
+}
+
 double radius_check(unsigned n, const double *x, double *grad, void *f_data)
 {
      /* make sure the radius is smaller than 6m */
