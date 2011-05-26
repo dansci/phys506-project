@@ -121,11 +121,11 @@ void fill_pmt_info(struct event *e, struct pmtmap *p)
      for (i=0; i<e->N; i++)
 	  e->pmt_hits[get_pmt_number(p, e->hits[i].hit_pos)]++;
 
-     for (i=0; i<e->N; i++)
+     /* loop over pmts, not photons here */
+     for (i=0; i<p->N; i++)
 	  e->pmt_hits_normed[i] = e->pmt_hits[i] / e->N;
 }
 
-/* this is returning greater than the dratted number of PMTS! */
 int get_pmt_number(struct pmtmap *p, double *pos)
 { 
      int ret = 0;
@@ -175,9 +175,9 @@ void fill_expected_info(double *pos, struct event *e, struct pmtmap *p)
 	  nd2 = np2 = costheta = 0;
 	  costheta = 0;
 	  for (j=0; j<3; j++) {
-	       nd[j] = p->pmt[i].x[j];
-	       np[j] = p->pmt[i].x[j] - pos[j];
-	       costheta += nd[j] * np[j];
+	       nd[j] = p->pmt[i].x[j]; /* outward normal from center*/
+	       np[j] = p->pmt[i].x[j] - pos[j]; /*photon->pmt vec*/
+	       costheta += nd[j] * np[j]; /* dot product */
 	       np2 += np[j]*np[j];
 	       nd2 += nd[j]*nd[j];
 	  }
