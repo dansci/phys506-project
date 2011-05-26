@@ -25,7 +25,7 @@ struct event {
      struct hit *hits;
 
      /* pos distn fitter info */
-     double *pmt_hits; /* number of hits per PMT */
+     int *pmt_hits; /* number of hits per PMT */
      double *pmt_hits_normed; /* normalized to one */
      double *e_pmt_hits_normed; /* expected number of hits per PMT */
 };
@@ -42,7 +42,7 @@ void init_pmtmap(struct pmtmap *p, struct event *e)
 
      /* allocate the space for the PMTs */
      p->pmt = malloc(p->N*sizeof(struct pmt));
-     e->pmt_hits = malloc(p->N*sizeof(double));
+     e->pmt_hits = malloc(p->N*sizeof(int));
      e->pmt_hits_normed = malloc(p->N*sizeof(double));
      e->e_pmt_hits_normed = malloc(p->N*sizeof(double));
      
@@ -128,7 +128,7 @@ void fill_pmt_info(struct event *e, struct pmtmap *p)
 
      /* loop over pmts, not photons here */
      for (i=0; i<p->N; i++)
-	  e->pmt_hits_normed[i] = e->pmt_hits[i] / e->N;
+	  e->pmt_hits_normed[i] = (double) e->pmt_hits[i] / e->N;
 }
 
 int get_pmt_number(struct pmtmap *p, double *pos)

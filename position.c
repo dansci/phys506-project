@@ -60,6 +60,16 @@ int main(int argc, char *argv[])
      struct pos_data data;
      data.p = &pmtmap;
      data.e = &e1;
+
+     if (argc > 1 ) {
+	  double x[3] = {atof(argv[1]), atof(argv[2]), atof(argv[3])};
+	  printf("mf_p(%g, %g, %g) = %g\n",
+		 x[0], x[1], x[2], mf_p(3, x, NULL, &data));
+	  printf("mf_P(%g, %g, %g) = %g\n",
+		 e1.spawn_pos[0], e1.spawn_pos[1], e1.spawn_pos[2],
+		 mf_p(3, e1.spawn_pos, NULL, &data));
+	  return 0;
+     }
      
      nlopt_set_min_objective(opt, mf_p, &data);
      double tols[4] = {XTOL, XTOL, XTOL};
