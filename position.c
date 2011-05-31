@@ -9,10 +9,10 @@
 
 int main(int argc, char *argv[])
 {
-     int NHITS = 500;
-     int NPHI = 10;
-     int NTHETA = 5;
-     double XTOL=0.5;
+     int NHITS = 100;
+     int NPHI = 134;
+     int NTHETA = 67;
+     double XTOL=0.1;
 
      struct pmtmap pmtmap;
      pmtmap.N = NPHI*NTHETA;

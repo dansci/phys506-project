@@ -1,1 +1,7 @@
 *~
+\#*#
+gmon.out
+position
+timing
+timing_debug
+.gitignore
