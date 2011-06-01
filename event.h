@@ -174,11 +174,10 @@ static double nd[3], np[3]; /* vector of detector normal and photon direction*/
 void fill_expected_info(double *pos, struct event *e, struct pmtmap *p)
 {
      /* we're going to make it proportional to cos(theta)/r^2 */
-     double nd2, np2, costheta, total = 0;
+     register double nd2, np2, costheta, total = 0;
      int i, j;
      for (i=0; i<p->N; i++) {
 	  nd2 = np2 = costheta = 0;
-	  costheta = 0;
 	  for (j=0; j<3; j++) {
 	       nd[j] = p->pmt[i].x[j]; /* outward normal from center*/
 	       np[j] = p->pmt[i].x[j] - pos[j]; /*photon->pmt vec*/
