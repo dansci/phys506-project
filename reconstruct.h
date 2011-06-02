@@ -15,7 +15,7 @@
 /* we may want to have this floating?  */
 /* for now set it equal to scint_time */
 
-double mf(unsigned n, const double *x, double *grad, void *f_data)
+double mf_t(unsigned n, const double *x, double *grad, void *f_data)
 {
      int N = ((struct event *) f_data)->N; /* number of photons */
      struct hit *hits = ((struct event *) f_data)->hits;
@@ -60,12 +60,28 @@ double mf_p(unsigned n, const double *x, double *grad, void *f_data)
      return 2*total;
 }
 
+double mf(unsigned n, const double *x, double *grad, void *f_data)
+{
+     double timing, position;
+
+     struct event *e = (struct event *) ((struct pos_data *) f_data)->e;
+
+     position = mf_p(n, x, grad, f_data);
+     timing = mf_t(n, x, grad, e);
+
+     /* binned chisquare is two times the likelihood */
+     return timing + position/2;
+}
+
 double radius_check(unsigned n, const double *x, double *grad, void *f_data)
 {
      /* make sure the radius is smaller than 6m */
      return x[0]*x[0] + x[1]*x[1] + x[2]*x[2] - 36;
 }
 
+/* FIXME: this requires f_data to be an event pointer whereas we're no
+ * longer really dealing with that primarily in our optimization
+ * functions */
 double time_check(unsigned n, const double *x, double *grad, void *f_data)
 {
      int N = ((struct event *) f_data)->N; /* number of photons */
