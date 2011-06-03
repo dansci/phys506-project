@@ -36,8 +36,11 @@ struct hit {
 };
 
 /* this should have the number of pmts and the division sorted out */
-void init_pmtmap(struct pmtmap *p, struct event *e)
+void init_pmtmap(struct pos_data *data)
 {
+     struct pmtmap *p = data->p;
+     struct event *e = data->e;
+
      int i, j;
 
      /* allocate the space for the PMTs */
@@ -115,8 +118,11 @@ void make_event(struct event *e, int N)
      }
 }
 
-void fill_pmt_info(struct event *e, struct pmtmap *p)
+void fill_pmt_info(struct pos_data *data)
 {
+     struct event *e = data->e;
+     struct pmtmap *p = data->p;
+
      int i;
      /* clear the PMT hits initially */
      for (i=0; i<p->N; i++)

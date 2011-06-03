@@ -49,18 +49,22 @@ int main(int argc, char *argv[])
      nlopt_set_lower_bounds(opt, lb);
      nlopt_set_upper_bounds(opt, ub);
 
-     nlopt_set_min_objective(opt, mf_t, &e1);
+     struct pos_data data;
+     data.p = NULL; /* no pmtmap required for timing fit */
+     data.e = &e1;
+
+     nlopt_set_min_objective(opt, mf_t, &data);
 //     nlopt_set_maxtime(opt, .5);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
      nlopt_set_xtol_abs(opt, tols);
 
-     ret = nlopt_add_inequality_constraint(opt, radius_check, &e1, 1e-10);
-     ret = nlopt_add_inequality_constraint(opt, time_check, &e1, 1e-15);
+     ret = nlopt_add_inequality_constraint(opt, radius_check, &data, 1e-10);
+     ret = nlopt_add_inequality_constraint(opt, time_check, &data, 1e-15);
 
      double x[4];
      x[0] = x[1] = x[2] = x[3] = 0;
 
-     double fval = mf_t(4, x, NULL, &e1);
+     double fval = mf_t(4, x, NULL, &data);
      
      ret = nlopt_optimize(opt, x, &fval);
      
@@ -76,7 +80,7 @@ int main(int argc, char *argv[])
      printf("and return value %d\n", ret);
 
      printf("log-likelihood at actual value is %g\n", 
-	    mf_t(4, e1.spawn_pos, NULL, &e1));
+	    mf_t(4, e1.spawn_pos, NULL, &data));
 
      free_random();
      return 0;

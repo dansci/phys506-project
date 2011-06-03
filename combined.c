@@ -20,15 +20,15 @@ int main(int argc, char *argv[])
      pmtmap.ntheta = NTHETA;
 
      struct event e1;
-     init_random();
-     init_pmtmap(&pmtmap, &e1);
-
-     make_event(&e1, NHITS);
-     fill_pmt_info(&e1, &pmtmap);
-     
      struct pos_data data;
      data.p = &pmtmap;
      data.e = &e1;
+     
+     init_random();
+     init_pmtmap(&data);
+
+     make_event(&e1, NHITS);
+     fill_pmt_info(&data);
      
      nlopt_opt opt;
      opt = nlopt_create(NLOPT_GN_ISRES, 4);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
      /* FIXME: it'd be nice if both checks required the same data
       * pointer */
      ret = nlopt_add_inequality_constraint(opt, radius_check, &data, 1e-10);
-     ret = nlopt_add_inequality_constraint(opt, time_check, &e1, 1e-15);
+     ret = nlopt_add_inequality_constraint(opt, time_check, &data, 1e-15);
 
      double x[4];
      x[0] = x[1] = x[2] = x[3] = 0;

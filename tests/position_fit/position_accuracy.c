@@ -47,11 +47,16 @@ int main(int argc, char *argv[])
 
 
      struct event e1;
+
+     struct pos_data data;
+     data.p = &pmtmap;
+     data.e = &e1;
+
      init_random();
-     init_pmtmap(&pmtmap, &e1);
+     init_pmtmap(&data);
 
      make_event(&e1, NHITS);
-     fill_pmt_info(&e1, &pmtmap);
+     fill_pmt_info(&data)
      
      nlopt_opt opt;
      opt = nlopt_create(NLOPT_GN_ISRES, 3);
@@ -60,9 +65,6 @@ int main(int argc, char *argv[])
      nlopt_set_lower_bounds(opt, lb);
      nlopt_set_upper_bounds(opt, ub);
 
-     struct pos_data data;
-     data.p = &pmtmap;
-     data.e = &e1;
 
      nlopt_set_min_objective(opt, mf_p, &data);
      double tols[3] = {XTOL, XTOL, XTOL};
