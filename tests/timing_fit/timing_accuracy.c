@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 
      /* generate event */
      struct event e1;
+     struct pos_data data;
+     data.p = NULL;
+     data.e = &e1;
      make_event(&e1, NHITS);
      sort_event(&e1);
 
@@ -48,7 +51,7 @@ int main(int argc, char *argv[])
      double ub[4] = {6, 6, 6, e1.hits[0].hit_time};
      nlopt_set_lower_bounds(opt, lb);
      nlopt_set_upper_bounds(opt, ub);
-
+     
      nlopt_set_min_objective(opt, mf, &data);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
      nlopt_set_xtol_abs(opt, tols);
