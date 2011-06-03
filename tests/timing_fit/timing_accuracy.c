@@ -38,6 +38,9 @@ int main(int argc, char *argv[])
 
      /* generate event */
      struct event e1;
+     struct pos_data data;
+     data.p = NULL;
+     data.e = &e1;
      make_event(&e1, NHITS);
      sort_event(&e1);
 
@@ -49,10 +52,6 @@ int main(int argc, char *argv[])
      nlopt_set_lower_bounds(opt, lb);
      nlopt_set_upper_bounds(opt, ub);
 
-     struct pos_data data;
-     data.p = NULL; /* no pmtmap required for timing fit */
-     data.e = &e1;
-     
      nlopt_set_min_objective(opt, mf, &data);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
      nlopt_set_xtol_abs(opt, tols);
