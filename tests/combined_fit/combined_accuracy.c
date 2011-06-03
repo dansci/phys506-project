@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-          double XTOL = -1; /* to be set by "user" */
+     double XTOL = -1; /* to be set by "user" */
      int NHITS = -1;
      
      int c;
@@ -67,6 +67,8 @@ int main(int argc, char *argv[])
      nlopt_set_min_objective(opt, mf, &data);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
      nlopt_set_xtol_abs(opt, tols);
+     nlopt_set_maxtime(opt, 20.0); /* unstick this */
+     nlopt_set_maxeval(opt, 4e5); /* if timing doesn't unstick it*/
 
      ret = nlopt_add_inequality_constraint(opt, radius_check, &data, 1e-10);
      ret = nlopt_add_inequality_constraint(opt, time_check, &data, 1e-15);
