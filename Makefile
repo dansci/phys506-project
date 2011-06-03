@@ -15,3 +15,7 @@ position_debug: position.c event.h geometry.h random.h reconstruct.h
 
 position_accuracy: ./tests/position_fit/position_accuracy.c event.h geometry.h random.h reconstruct.h
 	gcc -I ./ -o ./tests/position_fit/position_accuracy ./tests/position_fit/position_accuracy.c -lm -lgsl -lgslcblas -lnlopt -O2
+
+combined: combined.c event.h geometry.h random.h reconstruct.h
+	gcc -o combined combined.c -lm -lgsl -lgslcblas -lnlopt -O2
+

@@ -5,4 +5,8 @@ gmon.out
 position
 timing
 timing_debug
+combined
 .gitignore
+*.aux
+*.dvi
+*.log
