@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
      init_pmtmap(&data);
 
      make_event(&e1, NHITS);
-     fill_pmt_info(&data)
+     fill_pmt_info(&data);
      
      nlopt_opt opt;
      opt = nlopt_create(NLOPT_GN_ISRES, 3);
