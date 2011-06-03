@@ -7,3 +7,8 @@ position_debug
 tests/position_fit/position_accuracy
 timing
 timing_debug
+combined
+.gitignore
+*.aux
+*.dvi
+*.log
