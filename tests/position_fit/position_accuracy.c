@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
      data.e = &e1;
 
      nlopt_set_min_objective(opt, mf_p, &data);
-     double tols[4] = {XTOL, XTOL, XTOL};
+     double tols[3] = {XTOL, XTOL, XTOL};
      nlopt_set_xtol_abs(opt, tols);
      nlopt_set_maxtime(opt, 10.0); /* unstick this */
      nlopt_set_maxeval(opt, 4e5); /* if timing doesn't unstick it*/
