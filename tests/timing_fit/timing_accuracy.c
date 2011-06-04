@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
      nlopt_set_lower_bounds(opt, lb);
      nlopt_set_upper_bounds(opt, ub);
 
-     nlopt_set_min_objective(opt, mf, &data);
+     nlopt_set_min_objective(opt, mf_t, &data);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
      nlopt_set_xtol_abs(opt, tols);
      nlopt_set_maxtime(opt, 20.0); /* unstick this */
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
      double x[4];
      x[0] = x[1] = x[2] = x[3] = 0;
 
-     double fval = mf(4, x, NULL, &data);
+     double fval = mf_t(4, x, NULL, &data);
      
      ret = nlopt_optimize(opt, x, &fval);
 

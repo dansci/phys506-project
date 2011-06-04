@@ -54,8 +54,7 @@ int main(int argc, char *argv[])
 
      make_event(&e1, NHITS);
      fill_pmt_info(&data);
-     
-     
+
      nlopt_opt opt;
      opt = nlopt_create(NLOPT_GN_ISRES, 4);
      nlopt_result ret;

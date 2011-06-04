@@ -11,7 +11,7 @@
 int main(int argc, char *argv[])
 {
      /* default values */
-     int NHITS = 500;
+     int NHITS = 10;
      double XTOL = .1;
 
      int c;

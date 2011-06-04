@@ -19,5 +19,8 @@ position_accuracy: ./tests/position_fit/position_accuracy.c event.h geometry.h r
 combined: combined.c event.h geometry.h random.h reconstruct.h
 	gcc -o combined combined.c -lm -lgsl -lgslcblas -lnlopt -O2
 
+combined_debug: combined.c event.h geometry.h random.h reconstruct.h
+	gcc -o combined combined.c -lm -lgsl -lgslcblas -lnlopt -g -pg
+
 combined_accuracy: ./tests/combined_fit/combined_accuracy.c event.h geometry.h random.h reconstruct.h
 	gcc -I ./ -o ./tests/combined_fit/combined_accuracy ./tests/combined_fit/combined_accuracy.c -lm -lgsl -lgslcblas -lnlopt -O2

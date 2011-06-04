@@ -21,7 +21,7 @@ double mf_t(unsigned n, const double *x, double *grad, void *f_data)
      double t_i, d_i;
      double total = 0;
      double t0 = x[3];
-
+     
      for (i=0; i<N; i++) {
 	  t_i = hits[i].hit_time;
 	  d_i = vec_distance(hits[i].hit_pos, x, 3);
@@ -66,7 +66,7 @@ double mf(unsigned n, const double *x, double *grad, void *f_data)
      struct event *e = (struct event *) ((struct pos_data *) f_data)->e;
 
      position = mf_p(n, x, grad, f_data);
-     timing = mf_t(n, x, grad, e);
+     timing = mf_t(n, x, grad, f_data);
 
      /* returned the combined log-likelihood */
      return timing + position;
