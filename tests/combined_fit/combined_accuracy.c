@@ -58,16 +58,18 @@ int main(int argc, char *argv[])
      nlopt_opt opt;
      opt = nlopt_create(NLOPT_GN_ISRES, 4);
      nlopt_result ret;
-     double lb[4] = {-6, -6, -6, e1.hits[0].hit_time-10*scint_time};
+     /* when this was 10*scint_time, GSL_RNG_SEED 29 made the program
+      * return an error code... */
+     double lb[4] = {-6, -6, -6, e1.hits[0].hit_time-15*scint_time};
      double ub[4] = {6, 6, 6, e1.hits[0].hit_time};
-     nlopt_set_lower_bounds(opt, lb);
-     nlopt_set_upper_bounds(opt, ub);
+     ret = nlopt_set_lower_bounds(opt, lb);
+     ret = nlopt_set_upper_bounds(opt, ub);
 
-     nlopt_set_min_objective(opt, mf, &data);
+     ret = nlopt_set_min_objective(opt, mf, &data);
      double tols[4] = {XTOL, XTOL, XTOL, XTOL/light_speed};
-     nlopt_set_xtol_abs(opt, tols);
-     nlopt_set_maxtime(opt, 20.0); /* unstick this */
-     nlopt_set_maxeval(opt, 4e5); /* if timing doesn't unstick it*/
+     ret = nlopt_set_xtol_abs(opt, tols);
+     ret = nlopt_set_maxtime(opt, 20.0); /* unstick this */
+     ret = nlopt_set_maxeval(opt, 4e5); /* if timing doesn't unstick it*/
 
      ret = nlopt_add_inequality_constraint(opt, radius_check, &data, 1e-10);
      ret = nlopt_add_inequality_constraint(opt, time_check, &data, 1e-15);
@@ -79,9 +81,10 @@ int main(int argc, char *argv[])
 
      ret = nlopt_optimize(opt, x, &fval);
      if (ret > 0)
-	  printf("%g %g %g\n", x[0] - e1.spawn_pos[0], 
+	  printf("%g %g %g %g\n", x[0] - e1.spawn_pos[0], 
 		 x[1] - e1.spawn_pos[1],
-		 x[2] - e1.spawn_pos[2]);
+		 x[2] - e1.spawn_pos[2], 
+		 x[3] - e1.spawn_time);
      else
 	  fprintf(stderr, "optimizing failed with code %d\n", ret);
 
